@@ -31,7 +31,7 @@ earlier (yes, they are auto-saved!).
 
 Other Cool features are that you can view your Post History, Nomination History, Posts that you assigned for. You can also
 create a new nomination for a Post beneath you, although beware that such nominations will have to be approved by your 
-parent post (If you are a Secretary trying to spam everyone, remember, coordinators are watching!!).
+parent post (If you are a Secretary trying to spam everyone, remember, Coordinators are watching!!).
 
 Also it is possible to manually add users to a post, remove them from the posts or replace the old batch with a new one. 
 So yeah, the system is fool-proof ;) .

@@ -48,7 +48,7 @@ entries:
     output: web, pdf
     folderitems:
 
-    - title: About Ruby, Gems, Bundler, etc.
+    - title: Local Development
       url: /mydoc_about_ruby_gems_etc.html
       output: web, pdf
 
