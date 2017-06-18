@@ -61,7 +61,7 @@ entries:
     output: web, pdf
 
     folderitems:
-    - title: Pages
+    - title: Nomi-Models
       url: /mydoc_pages.html
       output: web, pdf
 

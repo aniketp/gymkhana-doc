@@ -1,183 +1,372 @@
 ---
-title: Pages
-tags: [getting_started, formatting, content_types]
-keywords: pages, authoring, exclusion, frontmatter
-last_updated: July 16, 2016
+title: Nomi-Models 
+tags:
+keywords:
+last_updated:
 summary: "This theme primarily uses pages. You need to make sure your pages have the appropriate frontmatter. One frontmatter tag your users might find helpful is the summary tag. This functions similar in purpose to the shortdesc element in DITA."
 sidebar: mydoc_sidebar
 permalink: mydoc_pages.html
 folder: mydoc
 ---
 
-## Where to author content
-Use a text editor such as Sublime Text, WebStorm, IntelliJ, or Atom to create pages. Atom is recommended because it's created by Github, which is driving some of the Jekyll development through Github Pages.
-
-## Where to save pages
-
-You can store your pages in any folder structures you want, with any level of folder nesting. The site output will pull all of those pages out of their folders and put them into the root directory. Check out the \_site folder, which is where Jekyll is generated, to see the difference between your project's structure and the resulting site output.
-
-The listing of all pages in the root directory (which happens when you add a permalink property to the pages) is what allows the relative linking and offline viewing of the site to work.
-
-## Frontmatter
-
-Make sure each page has frontmatter at the top like this:
 
 
-```yaml
----
-title: Alerts
-tags: [formatting]
-keywords: notes, tips, cautions, warnings, admonitions
-last_updated: July 3, 2016
-summary: "You can insert notes, tips, warnings, and important alerts in your content."
-sidebar: mydoc_sidebar
-permalink: mydoc_alerts.html
----
-```
-
-Frontmatter is always formatted with three hyphens at the top and bottom. Your frontmatter must have a `title` and `permalink` value. All the other values are optional.
-
-Note that you cannot use variables in frontmatter.
-
-The following table describes each of the frontmatter that you can use with this theme:
-
-| Frontmatter | Required? | Description |
-|-------------|-------------|-------------|
-| **title** | Required | The title for the page |
-| **tags** | Optional | Tags for the page. Make all tags single words, with underscores if needed (rather than spaces). Separate them with commas. Enclose the whole list within brackets. Also, note that tags must be added to \_data/tags_doc.yml to be allowed entrance into the page. This prevents tags from becoming somewhat random and unstructured. You must create a tag page for each one of your tags following the pattern shown in the tags folder. (Tag pages aren't automatically created.)  |
-| **keywords** | Optional | Synonyms and other keywords for the page. This information gets stuffed into the page's metadata to increase SEO. The user won't see the keywords, but if you search for one of the keywords, it will be picked up by the search engine.  |
-| **last_updated**  | Optional | The date the page was last updated. This information could helpful for readers trying to evaluate how current and authoritative information is. If included, the last_updated date appears in the footer of the page in small font.|
-| **sidebar** | Required | Refers to the sidebar data file for this page. Don't include the ".yml" file extension for the sidebar &mdash; just provide the file name. If no sidebar is specified, this value will inherit the `default` property set in your \_config.yml file for the page's frontmatter. |
-| **summary** | Optional | A 1-2 word sentence summarizing the content on the page. This gets formatted into the summary section in the page layout. Adding summaries is a key way to make your content more scannable by users (check out [Jakob Nielsen's site](http://www.nngroup.com/articles/corporate-blogs-front-page-structure/) for a great example of page summaries.) The only drawback with summaries is that you can't use variables in them. |
-| **permalink**| Required | The permalink *must* match the filename in order for automated links to work. Additionally, you must include the ".html" in the filename. Do not put forward slashes around the permalink (this makes Jekyll put the file inside a folder in the output). When Jekyll builds the site, it will put the page into the root directory rather than leaving it in a subdirectory or putting it inside a folder and naming the file index.html. Having all files flattened in the root directory is essential for relative linking to work and for all paths to JS and CSS files to be valid. |
-| **datatable** | Optional | 'true'. If you add `datatable: true` in the frontmatter, scripts for the [jQuery Datatables plugin](https://www.datatables.net/) get included on the page. You can see the scripts that conditionally appear by looking in the \_layouts/default.html page. |
-| **toc** | Optional | If you specify `toc: false` in the frontmatter, the page won't have the table of contents that appears below the title. The toc refers to the list of jump links below the page title, not the sidebar navigation. You probably want to hide the TOC on the homepage and product landing pages.|
-
-## Colons in page titles
-
-If you want to use a colon in your page title, you must enclose the title's value in quotation marks.
-
-## Page names and excluding files from outputs
-
-By default, everything in your project is included in the output. You can exclude all files that don't belong to that project by specifying the file name, the folder name, or by using wildcards in your configuration file:
-
-```yaml
-exclude:
-
-- filename.md
-- subfolder_name/
-- mydoc_*
-- gitignore
-```
-
-Wildcards will exclude every match after the `*`.
-
-## Saving pages as drafts
-
-If you add `published: false` in the frontmatter, your page won't be published. You can also move draft pages into the \_drafts folder to exclude them from the build. With posts, you can also keep them as drafts by omitting the date in the title.
-
-## Markdown or HTML format
-
-Pages can be either Markdown or HTML format (specified through either an .md or .html file extension).
-
-If you use Markdown, you can also include HTML formatting where needed. But if your format is HTML, you must add a `markdown="1"` attribute to the element in order to use Markdown inside that HTML element:
+## Club
+Club model is the template of all clubs. The objects represent respective clubs in every council.
+**Note:** As an example object, we'll use *Programming Club*
 
 ```
-<div markdown="1">This is a [link](http://exmaple.com).</div>
+ class Club(models.Model):
+     club_name = models.CharField(max_length=100, null=True)
+     club_parent = models.ForeignKey('self', null=True, blank=True)
+     club_members = models.ManyToManyField(User, blank=True)
+ 
+     def __str__(self):
+         return self.club_name
 ```
+### Properties
+`club_name` : A character field for the name of the club.
+ 
+ e.g : Programming Club
 
-For your Markdown files, note that a space or two indent will set text off as code or blocks, so avoid spacing indents unless intentional.
-
-If you have a lot of HTML, as long as the top and bottom tags of the HTML are flush left in a Markdown file, all the tags inside those bookend HTML tags will render as HTML, regardless of their indentation. (This can be especially useful for tables.)
-
-
-## Page names
-
-I recommend prefixing your page names with the product, such as "mydoc_pages" instead of just "pages." This way if you have other products that also have topics with generic names such as "pages," there won't be naming conflicts.
-
-Additionally, consider adding the product name in parentheses after the title, such as "Pages (Mydoc)" so that users can clearly navigate different topics for each product.
-
-## Kramdown Markdown
-
-Kramdown is the Markdown flavor used in the theme. This mostly aligns with Github-flavored Markdown, but with some differences in the indentation allowed within lists. Basically, Kramdown requires you to line up the indent between list items with the first starting character after the space in your list item numbering. See this [blog post on Kramdown and Rouge](http://idratherbewriting.com/2016/02/21/bug-with-kramdown-and-rouge-with-github-pages/) for more details.
-
-You can use standard Multimarkdown syntax for tables. You can also use fenced code blocks with lexers specifying the type of code. The configuration file shows the Markdown processor and extensiosn:
-
-```yaml
-highlighter: rouge
-markdown: kramdown
-kramdown:
- input: GFM
- auto_ids: true
- hard_wrap: false
- syntax_highlighter: rouge
+`club_parent` : The Club under which the target club is present
+ 
+ e.g :  Club -> Programing Club, Parent -> SnT Council
+ 
+`club_members` : Linked to User class, list of all club members
+ 
+### Methods
 ```
+ def __str__(self):
+          return self.club_name
+```
+A method to return the name of club when the club object is created.
 
-## Automatic mini-TOCs
 
-By default, a TOC appears at the top of your pages and posts. If you don't want the TOC to appear for a specific page, such as for a landing page or other homepage, add `toc: false` in the frontmatter of the page.
-
-The mini-TOC requires you to use the `##` Markdown syntax for headings. If you use `<h2>` elements, you must add an ID attribute for the heading element in order for it to appear in the mini-TOC (for example, `<h2 id="mysampleid">Heading</h2>`.
-
-## Headings
-
-Use pound signs before the heading title to designate the level. Note that kramdown requires headings to have one space before and after the heading. Without this space above and below, the heading won't render into HTML.
+## Post
+Post Model is the template for all the posts within every club.
 
 ```
-## Second-level heading
-```
-
-**Result:**
-
-## Second-level heading
-
------
-
-```
-### Third-level heading
-```
-**Result:**
-
-### Third-level heading
-
-------
-
-```
-#### Fourth-level heading
-```
-
-**Result:**
-
-#### Fourth-level heading
-
-## Headings with ID Tags {#someIdTag}
-
-If you want to use a specific ID tag with your heading, add it like this:
+ class Post(models.Model):
+     post_name = models.CharField(max_length=500, null=True)
+     club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
+     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+     post_holders = models.ManyToManyField(User, blank=True)
+     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
+     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
+     perms = models.CharField(max_length=200, choices=POST_PERMS, default='normal')
+ 
+     def __str__(self):
+         return self.post_name
+ 
+     def remove_holders(self):
+         for holder in self.post_holders.all():
+             history = PostHistory.objects.get(post=self, user=holder)
+             history.end = datetime.now()
+             history.save()
+ 
+         self.post_holders.clear()
+         return self.post_holders
 
 ```
-## Headings with ID Tags {#someIdTag}
+
+### Properties
+`post_name` : Name of the Post , e.g Secretary
+
+`club` : ForeignKey to Club model. Every Post has a Club. And a Club can have multiple Posts.
+ 
+`parent` : The Post which releases nomination for the target Post. e.g Coordinator is the parent of Secretary.
+  
+`post_holders` : Linked to User class, List of all Post holders.
+
+`post_approvals` : ManytoManyField to self. It is linked to all the posts within the club who are responsible for
+ approving the post. Suppose you are a Secretary and want to create a Post (say Freshers) under yourself. Then the
+ Coordinators and the Gen-Sec are present in `post_approvals` column. 
+ 
+ `status` : the current status of the Post. Following are the possible options. `choices=POST_STATUS` 
+
+```
+ POST_STATUS = (
+         ('Post created', 'Post created'),
+         ('Post approved', 'Post approved'),
+         ('Post rejected', 'Post rejected'),
+         ('Post on work', 'Post on work'),
+ )
 ```
 
-Then you can reference it with a link like this on the same page:
+`perms` : The permissions of a post. It is differentiated in three possible `choices=POST_PERMS`. 
+```
+ POST_PERMS = (
+     ("normal", "normal"),                                \\ Normal Post Holder  e.g Secretary
+     ("can approve the post", "can approve the post"),    \\ Child Post Creator, e.g Coordinator
+     ("can approve post and send nominations to users",   \\ The topmost Post,   e.g SnT Gen-Sec
+     "can approve post and send nominations to users"),
+ )
+```
+<hr>
+
+### Methods
+ `remove_holder()` removes the current `post_holder` from his post and adds the information in the `Post History`.
+```
+ def remove_holders(self):
+      for holder in self.post_holders.all():
+          history = PostHistory.objects.get(post=self, user=holder)   
+          history.end = datetime.now()                    \\ Adding the Post in PostHistory Model
+          history.save()
+
+      self.post_holders.clear()                           \\ Removing the current User
+      return self.post_holders                            \\ Returning the remaining list of holders
+```
+
+
+
+## Post History
+PostHistory Model contains the history of a User's Previous and Current Posts.
 
 ```
-[Some link](#someIdTag)
+ class PostHistory(models.Model):
+     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
+     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+     start = models.DateField(auto_now_add=True)
+     end = models.DateField(null=True, blank=True, editable=True)
 ```
 
-**Result:**
+### Properties
+`post` : Linked to the Post for which the history is stored
 
-[Some link](#someIdTag)
+`user` : Linked to the User whose Post History is being stored
 
-For details about linking to headings on different pages, see [Automated links to headings on pages][mydoc_hyperlinks.html#bookmarklinks].
+### Date-Field
+`start` : The start date for the Post,
+          `auto_now_add=True` gets automatically added once a user is assigned a post.
+          
+`end` : The end date for a Post, `editable=True`: In case the User is continuing for a Post, the end date can be manually 
+extended.
+          
 
-## Specify a particular page layout
+## Nomination
+Nomination Model is the template for every Nomination that is/was released. This class is the heart of the Portal's API.
 
-The configuration file sets the default layout for pages as the "page" layout.
+```
+ class Nomination(models.Model):
+     name = models.CharField(max_length=200)
+     description = models.TextField(max_length=20000, null=True, blank=True)
+     brief_desc = models.TextField(max_length=300, null=True, blank=True)
+     nomi_post = models.ForeignKey(Post, null=True)
+     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
+ 
+     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
+     nomi_approvals = models.ManyToManyField(Post, related_name='nomi_approvals', symmetrical=False, blank=True)
+     club_search = models.ManyToManyField(Post, related_name='all_clubs', symmetrical=False, blank=True)
+ 
+     opening_date = models.DateField(null=True, blank=True)
+     closing_date = models.DateField(null=True, blank=True, editable=True)
+ 
+     year_choice = models.CharField(max_length=100, choices=YEAR_1, null=True)
+     hall_choice = models.CharField(max_length=100, choices=HALL_1, null=True)
+     dept_choice = models.CharField(max_length=100, choices=DEPT_1, null=True)
+ 
+     def __str__(self):
+         return self.name
+ 
+     def append(self):
+         selected = NominationInstance.objects.filter(nomination=self, status='Accepted')
+         self.status = 'Work done'
+         self.save()
+         for each in selected:
+             PostHistory.objects.create(post=self.nomi_post, user=each.user)
+             self.nomi_post.post_holders.add(each.user)
+ 
+         return self.nomi_post.post_holders
+ 
+     def replace(self):
+         for holder in self.nomi_post.post_holders.all():
+             history = PostHistory.objects.get(post=self.nomi_post, user=holder)
+             history.end = datetime.now()
+             history.save()
+ 
+         self.nomi_post.post_holders.clear()
+         self.append()
+         return self.nomi_post.post_holders
+ 
+     def open_to_users(self):
+         self.status = 'Nomination out'
+         self.opening_date = datetime.now()
+         self.save()
+         return self.status
+```
 
-You can create other layouts inside the layouts folder. If you create a new layout, you can specify that your page use your new layout by adding `layout: mylayout.html` in the page's frontmatter. Whatever layout you specify in the frontmatter of a page will override the layout default set in the configuration file.
+### Properties
+`name` : Name of the Nomination
 
-## Comments
+`description` : Description about the Nomination
 
-Disqus, a commenting system, is integrated into the theme. In the configuration file, specify the Disqus code for the universal code, and Disqus will appear. If you don't add a Disqus value, the Disqus form isn't included.
+`brief_desc` : A brief description about the Nomination that is published in the index page
 
-{% include links.html %}
+`nomi_post` : Name of the Post for which the Nomination is being released.
+
+`nomi_form` : The Question Form for the Nomination, which the Users are supposed to fill up while applying for the Post.
+
+### Status
+`status` : The Status of the Nomination. Following are the possible options, `choices=STATUS`
+```
+ STATUS = (
+         ('Nomination created', 'Nomination created'),
+         ('Nomination out', 'Nomination out'),
+         ('Interview period', 'Interview period'),
+         ('Result compiled', 'Result compiled'),
+         ('Work done', 'Work done')
+ )
+```
+
+`nomi_approvals` : Same as `post_approvals`, linked to all the Users who can approve the Nomination
+
+### Date-Fields
+`opening_date` : The date when the Nomination is released, It is automatically assigned when the Gen-Sec approves a 
+Nomination, that is, when it is visible for the Users to apply.
+
+`closing_date` : The closing date of the Nomination. `editable=True`: The deadline can be extended, which is usually the
+ case most of the time.
+ 
+### Choices
+`year_choice` : To specify the batch for whom the Nomination is being released.
+
+`hall_choice` : To specify the hall. Probably will not be used, although it is included in case Hall specific
+  nominations are ever released.
+
+`dept_choice` : To specify the department for which the Nomination is being released.
+  
+### Methods
+
+`append()` method assigns the respective Posts to the selected Users after Gen-Sec approves the result.
+
+```
+ def append(self):
+     selected = NominationInstance.objects.filter(nomination=self, status='Accepted')
+     self.status = 'Work done'                
+     self.save()
+     for each in selected:            // This loop adds each selected user to the post_holders list
+         PostHistory.objects.create(post=self.nomi_post, user=each.user)
+         self.nomi_post.post_holders.add(each.user)
+
+     return self.nomi_post.post_holders            // Return final list of users
+```
+
+`replace()` method clears all the Post Holders and adds the Post to each individual's Post History.
+
+```
+ def replace(self):
+     for holder in self.nomi_post.post_holders.all():
+         history = PostHistory.objects.get(post=self.nomi_post, user=holder)
+         history.end = datetime.now()       
+         history.save()          // Saves the post in history
+
+     self.nomi_post.post_holders.clear()
+     self.append()               // Clears and saves an empty list
+     
+     return self.nomi_post.post_holders
+```
+
+`open_to_users()` method releases the Nomination for the users when the Gen-Sec approves the Nomination. The status is 
+changed to `Nomination Out` and opening date is assigned the current date.
+
+```
+ def open_to_users(self):
+     self.status = 'Nomination out'
+     self.opening_date = datetime.now()
+     self.save()
+     return self.status
+```
+
+
+## Nomination Instance
+The Nomination instance model is the template for keeping the record of each applicant's information about the Nomination.
+When a User applies for a Nomination, a Nomination Instance is created for that particular User, linking him to the Nomination.
+
+### Properties
+`nomination` : ForeignKey to the Nomination class. The name of the nomination for which the instance is created.
+ 
+`user` : The name of the user who has applied for the Post.
+
+### Choices
+`status` : The status of the instance, `choices=NOMI_STATUS`. Either Accepted or Rejected.
+```
+ NOMI_STATUS = (
+         ('Accepted', 'Accepted'),
+         ('Rejected', 'Rejected'),
+ )
+```
+
+`interview_status` : The interview status of the instance, `choices=INTERVIEW_STATUS`.
+```
+ INTERVIEW_STATUS = (
+     ('Interview Not Done', 'Interview Not Done'),
+     ('Interview Done', 'Interview Done'),
+ )
+```
+
+### Forms
+`comments` : The Text-Area for adding comments about the User during Interview Period.
+
+`filled_form` : The answer form User filled pre-interview. The Interview panel can view the answers .
+
+
+## User Profile
+
+```
+ class UserProfile(models.Model):
+     user = models.OneToOneField(User, on_delete=models.CASCADE)
+     name = models.CharField(max_length=40, blank=True)
+     roll_no = models.IntegerField(null=True)
+     year = models.CharField(max_length=4, choices=YEAR, default='Y16')
+     programme = models.CharField(max_length=7, choices=PROGRAMME, default='B.Tech')
+     department = models.CharField(max_length=200, choices=DEPT, default='AE')
+     hall = models.CharField(max_length=10, choices=HALL, default=1)
+     room_no = models.CharField(max_length=10, null=True, blank=True)
+     contact = models.CharField(max_length=10, null=True, blank=True)
+ 
+     def __str__(self):
+         return str(self.name)
+```
+### Choices
+`year` : Batch of the User, e.g Y16
+
+```
+ YEAR = (
+     ('Y16', 'Y16'),
+     ('Y15', 'Y15'),
+     ('Y14', 'Y14'),
+     ('Y13', 'Y13'),
+     ('Y12', 'Y12'),
+     ('Y11', 'Y11'),
+ )
+```
+
+`programme` : Either B.S or B.tech
+
+```
+ PROGRAMME = (
+         ('B.Tech', 'B.Tech'),
+         ('B.S', 'B.S'),
+ )
+```
+
+`department` : The dept of the User
+
+```
+ DEPT = (
+     ('Aerospace Engineering', 'AE'),
+     ('Biological Sciences & Engineering', 'BSBE'),
+     ('Chemical Engineering', 'CHE'),
+     ('Civil Engineering', 'CE'),
+     ('Computer Science & Engineering', 'CSE'),
+     ('Electrical Engineering', 'EE'),
+     ('Materials Science & Engineering', 'MSE'),
+     ('Mechanical Engineering', 'ME'),
+     ('Industrial & Management Engineering', 'IME'),
+     ('Chemistry', 'CHM'),
+     ('Mathematics & Scientific Computing', 'MTH'),
+     ('Physics', 'PHY'),
+     ('Earth Sciences', 'ES')
+ )
+```
